@@ -3,7 +3,8 @@ package com.example.levelup.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.levelup.ui.HabitList
+import androidx.navigation.compose.rememberNavController
+import com.example.levelup.ui.BottomNav
 import com.example.levelup.ui.theme.LevelUpTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,11 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LevelUpTheme {
-                HabitList(
-                    onAddTask = {
-                        // TODO
-                    }
-                )
+                BottomNav()
             }
         }
     }

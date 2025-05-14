@@ -24,7 +24,7 @@ fun DayItemView(
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val baseBackground = if (dayItem.isCenter) colorScheme.primary else colorScheme.surface
-    val darkerBackground = if (dayItem.isCenter) colorScheme.tertiary else colorScheme.surfaceVariant
+    val lighterBackground = if (dayItem.isCenter) colorScheme.tertiary else colorScheme.surfaceVariant
     val textColor = if (dayItem.isCenter) colorScheme.onPrimary else colorScheme.onSurface
     val fontWeight = if (dayItem.isCenter) FontWeight.Bold else FontWeight.Normal
 
@@ -40,7 +40,7 @@ fun DayItemView(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = darkerBackground,
+                    color = lighterBackground,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(vertical = 4.dp),

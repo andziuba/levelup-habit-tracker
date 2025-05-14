@@ -1,15 +1,21 @@
 package com.example.levelup.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+
+@Composable
+fun DailyHabitScreen() {
+    DayRow()
+    HabitList(
+        onAddTask = {
+            // Handle add task
+        }
+    )
+}
 
 @Composable
 fun HabitList(onAddTask: () -> Unit) {
