@@ -1,4 +1,4 @@
-package com.example.levelup.ui
+package com.example.levelup.ui.screens.dailyhabit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

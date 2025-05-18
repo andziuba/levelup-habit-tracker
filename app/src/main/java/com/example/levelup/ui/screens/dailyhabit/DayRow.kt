@@ -1,4 +1,4 @@
-package com.example.levelup.ui
+package com.example.levelup.ui.screens.dailyhabit
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.levelup.model.DayItem
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -57,6 +58,7 @@ fun DayRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
+            .padding(top = 7.dp)
     ) {
         Text(
             text = headerText,
@@ -65,7 +67,7 @@ fun DayRow(
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(bottom = 8.dp),
             textAlign = TextAlign.Center
         )
 
