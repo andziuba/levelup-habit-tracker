@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822410278055",
+    "project_id": "levelup-habit-tracker",
+    "storage_bucket": "levelup-habit-tracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822410278055:android:0e872b36325f7f7c021782",
+        "android_client_info": {
+          "package_name": "com.example.levelup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCti_P1Z3HklSXMfkof2lLFhuhiYME8SXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
