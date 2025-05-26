@@ -7,16 +7,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun DailyHabitScreen() {
-    DayRow()
+fun DailyHabitScreen(navController: NavController) {
     HabitList(
         onAddTask = {
-            // Handle add task
+            navController.navigate("add_habit")
         }
     )
 }
+
 
 @Composable
 fun HabitList(onAddTask: () -> Unit) {

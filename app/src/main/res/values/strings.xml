@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">LevelUp</string>
+    <string name="add_new_habit">Add New Habit</string>
+    <string name="back">Back</string>
+    <string name="habit_name">Habit Name</string>
+    <string name="frequency">Frequency</string>
+    <string name="duration">Duration</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="save">Save</string>
 </resources>

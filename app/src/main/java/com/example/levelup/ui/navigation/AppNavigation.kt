@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.levelup.ui.components.BottomNavItem
 import com.example.levelup.ui.screens.dailyhabit.DailyHabitScreen
+import com.example.levelup.ui.screens.dailyhabit.AddHabitScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -16,8 +17,15 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         modifier = modifier
     ) {
         composable(BottomNavItem.Today.route) {
-            DailyHabitScreen()
+            DailyHabitScreen(navController)
         }
-        // TODO: Add other screen composables when implemented
+        composable("add_habit") {
+            AddHabitScreen(
+                navController = navController,
+                onHabitAdded = { habit ->
+                    // TODO: Przechowaj nawyk np. w ViewModel
+                }
+            )
+        }
     }
 }
