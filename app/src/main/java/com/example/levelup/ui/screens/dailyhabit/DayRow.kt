@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.levelup.model.DayItem
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -24,7 +23,8 @@ import java.util.*
 fun DayRow(
     today: LocalDate = LocalDate.now(),
     daysInPast: Int = 365,
-    daysInFuture: Int = 365
+    daysInFuture: Int = 365,
+    onDateSelected: (LocalDate) -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -84,5 +84,8 @@ fun DayRow(
                 modifier = Modifier.width(itemWidth)
             )
         }
+    }
+    LaunchedEffect(pagerState.currentPage) {
+        onDateSelected(days[pagerState.currentPage].date)
     }
 }

@@ -1,4 +1,3 @@
-// AddHabitScreen.kt
 package com.example.levelup.ui.screens.dailyhabit
 
 import androidx.compose.foundation.layout.*
@@ -14,20 +13,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.levelup.R
-import com.example.levelup.model.Duration
 import com.example.levelup.model.Frequency
 import com.example.levelup.model.Habit
+import com.example.levelup.viewmodel.HabitViewModel
+import com.example.levelup.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitScreen(
     navController: NavController,
-    onHabitAdded: (Habit) -> Unit
+    habitViewModel: HabitViewModel,
+    authViewModel: AuthViewModel
 ) {
     var name by remember { mutableStateOf("") }
     var selectedFrequency by remember { mutableStateOf(Frequency.DAILY) }
     var hours by remember { mutableStateOf(0) }
     var minutes by remember { mutableStateOf(30) }
+    val currentUser by authViewModel.currentUser.collectAsState()
+
 
     val scrollState = rememberScrollState()
 
@@ -114,13 +117,14 @@ fun AddHabitScreen(
                 Button(
                     onClick = {
                         if (name.isNotBlank()) {
-                            onHabitAdded(
-                                Habit(
-                                    name = name,
-                                    frequency = selectedFrequency,
-                                    duration = Duration(hours, minutes)
-                                )
+                            val newHabit = Habit(
+                                name = name,
+                                frequency = selectedFrequency,
+                                hours = hours,
+                                minutes = minutes,
+                                userId = currentUser!!.uid
                             )
+                            habitViewModel.insertHabit(newHabit)
                             navController.popBackStack()
                         }
                     },

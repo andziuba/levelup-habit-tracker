@@ -1,23 +1,20 @@
 package com.example.levelup.model
 
 import java.io.Serializable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "habits")
 data class Habit(
-    val id: Long = System.currentTimeMillis(),
+    @PrimaryKey val id: Long = System.currentTimeMillis(),
     val name: String,
     val frequency: Frequency,
-    val duration: Duration
+    val hours: Int,
+    val minutes: Int,
+    val createdAt: Long = System.currentTimeMillis(),
+    val userId: String
 ) : Serializable
 
 enum class Frequency {
     DAILY, WEEKLY, MONTHLY
-}
-
-data class Duration(
-    val hours: Int,
-    val minutes: Int
-) : Serializable {
-    override fun toString(): String {
-        return "${hours}h ${minutes}m"
-    }
 }
