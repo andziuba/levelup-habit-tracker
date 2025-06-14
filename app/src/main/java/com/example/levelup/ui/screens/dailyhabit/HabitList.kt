@@ -45,9 +45,11 @@ fun HabitListDisplay(
 fun HabitChecklistItem(
     habit: Habit,
     date: LocalDate,
-    viewModel: HabitViewModel
+    viewModel: HabitViewModel,
+    today: LocalDate = LocalDate.now()
 ) {
     val isCompleted = viewModel.isHabitCompletedForDate(habit, date)
+    val isFutureDate = date.isAfter(today)
 
     Surface(
         modifier = Modifier
@@ -67,6 +69,7 @@ fun HabitChecklistItem(
                 onCheckedChange = { isChecked ->
                     viewModel.toggleHabitCompletion(habit, date, isChecked)
                 },
+                enabled = !isFutureDate,
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
                     uncheckedColor = MaterialTheme.colorScheme.primary
