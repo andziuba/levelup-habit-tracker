@@ -47,4 +47,19 @@ class HabitViewModel(application: Application) : AndroidViewModel(application) {
             }
         }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     }
+
+    fun toggleHabitCompletion(habit: Habit, date: LocalDate, isCompleted: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dateKey = date.toString()
+            val newCompletions = habit.completions.toMutableMap().apply {
+                this[dateKey] = isCompleted
+            }
+            habitDao.updateCompletions(habit.id, newCompletions)
+            habit.userId.let { loadHabitsForUser(it) }
+        }
+    }
+
+    fun isHabitCompletedForDate(habit: Habit, date: LocalDate): Boolean {
+        return habit.completions[date.toString()] ?: false
+    }
 }

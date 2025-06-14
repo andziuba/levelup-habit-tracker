@@ -12,7 +12,8 @@ data class Habit(
     val hours: Int,
     val minutes: Int,
     val createdAt: Long = System.currentTimeMillis(),
-    val userId: String
+    val userId: String,
+    val completions: Map<String, Boolean> = emptyMap()
 ) : Serializable
 
 enum class Frequency {

@@ -13,9 +13,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import com.example.levelup.viewmodel.HabitViewModel
+import java.time.LocalDate
 
 @Composable
-fun HabitListDisplay(habits: List<Habit>) {
+fun HabitListDisplay(
+    habits: List<Habit>,
+    date: LocalDate,
+    viewModel: HabitViewModel
+) {
     if (habits.isEmpty()) {
         Text(
             text = "No habits to display",
@@ -25,17 +31,23 @@ fun HabitListDisplay(habits: List<Habit>) {
     } else {
         Column(modifier = Modifier.fillMaxWidth()) {
             habits.forEach { habit ->
-                HabitChecklistItem(habit)
+                HabitChecklistItem(
+                    habit = habit,
+                    date = date,
+                    viewModel = viewModel
+                )
             }
         }
     }
 }
 
-// todo: zapis wykonania zadania do bazy
-// todo: oznaczenie checked tylko na dany dzień
 @Composable
-fun HabitChecklistItem(habit: Habit) {
-    var checked by remember { mutableStateOf(false) }
+fun HabitChecklistItem(
+    habit: Habit,
+    date: LocalDate,
+    viewModel: HabitViewModel
+) {
+    val isCompleted = viewModel.isHabitCompletedForDate(habit, date)
 
     Surface(
         modifier = Modifier
@@ -51,8 +63,10 @@ fun HabitChecklistItem(habit: Habit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checked,
-                onCheckedChange = { checked = it },
+                checked = isCompleted,
+                onCheckedChange = { isChecked ->
+                    viewModel.toggleHabitCompletion(habit, date, isChecked)
+                },
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
                     uncheckedColor = MaterialTheme.colorScheme.primary

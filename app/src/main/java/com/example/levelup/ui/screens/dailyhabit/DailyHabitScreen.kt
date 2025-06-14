@@ -57,7 +57,11 @@ fun DailyHabitScreen(
                 today = LocalDate.now(),
                 onDateSelected = { date -> selectedDate = date }
             )
-            HabitListDisplay(habits = habits)
+            HabitListDisplay(
+                habits = habits,
+                date = selectedDate,
+                viewModel = habitViewModel
+            )
         }
     }
 }

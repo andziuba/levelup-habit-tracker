@@ -14,4 +14,7 @@ interface HabitDao {
 
     @Delete(entity = Habit::class)
     suspend fun deleteHabit(habit: Habit)
+
+    @Query("UPDATE habits SET completions = :completions WHERE id = :habitId")
+    suspend fun updateCompletions(habitId: Long, completions: Map<String, Boolean>)
 }
