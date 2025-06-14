@@ -145,8 +145,11 @@ fun RegisterScreen(
 
             Button(
                 onClick = {
+                    val trimmedEmail = email.trim()
+                    val trimmedDisplayName = displayName.trim()
+
                     if (password == confirmPassword) {
-                        viewModel.register(email, password, displayName)
+                        viewModel.register(trimmedEmail, password, trimmedDisplayName)
                     } else {
                         viewModel.setAuthError("Passwords don't match")
                     }

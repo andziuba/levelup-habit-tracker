@@ -29,19 +29,15 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // Clear auth errors when screen is first shown
     LaunchedEffect(Unit) {
         viewModel.clearAuthError()
     }
 
-    // Handle success message display and auto-clear
     LaunchedEffect(registrationSuccess, email, password) {
         if (registrationSuccess != null) {
             if (email.isNotEmpty() || password.isNotEmpty()) {
-                // Clear success message if user starts typing
                 viewModel.clearRegistrationSuccess()
             } else {
-                // Auto-clear after 5 seconds
                 delay(5000)
                 viewModel.clearRegistrationSuccess()
             }
@@ -65,7 +61,6 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Success message with better visibility
             registrationSuccess?.let { message ->
                 AlertDialog(
                     onDismissRequest = { viewModel.clearRegistrationSuccess() },
@@ -127,7 +122,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { viewModel.login(email, password) },
+                onClick = {
+                    val trimmedEmail = email.trim()
+                    viewModel.login(trimmedEmail, password)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),

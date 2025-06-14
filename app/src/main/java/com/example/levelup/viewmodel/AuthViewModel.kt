@@ -58,11 +58,13 @@ class AuthViewModel : ViewModel() {
             try {
                 clearAuthError()
                 val firebaseUser = authService.login(email, password)
-                firebaseUser?.let {
-                    loadUser(it.uid)
+                if (firebaseUser != null) {
+                    loadUser(firebaseUser.uid)
+                } else {
+                    _authError.value = "Incorrect email or password"
                 }
             } catch (e: Exception) {
-                _authError.value = e.localizedMessage ?: "Login failed"
+                _authError.value = "Incorrect email or password"
             }
         }
     }
