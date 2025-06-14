@@ -38,7 +38,12 @@ fun DailyHabitScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("add_habit") }) {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate("add_habit") },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add Task")
             }
         }

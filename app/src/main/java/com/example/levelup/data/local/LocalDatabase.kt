@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.levelup.model.Habit
 
-@Database(entities = [Habit::class], version = 2)
+@Database(entities = [Habit::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class LocalDatabase : RoomDatabase() {
     abstract fun habitDao(): HabitDao

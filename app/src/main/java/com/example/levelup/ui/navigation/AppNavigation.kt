@@ -10,10 +10,12 @@ import com.example.levelup.ui.components.BottomNavItem
 import com.example.levelup.ui.screens.dailyhabit.DailyHabitScreen
 import com.example.levelup.ui.screens.dailyhabit.AddHabitScreen
 import com.example.levelup.viewmodel.HabitViewModel
+import com.example.levelup.viewmodel.AuthViewModel
 
 @Composable
 fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
     val habitViewModel: HabitViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -23,13 +25,15 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         composable(BottomNavItem.Today.route) {
             DailyHabitScreen(
                 navController = navController,
-                habitViewModel = habitViewModel
+                habitViewModel = habitViewModel,
+                authViewModel = authViewModel
             )
         }
         composable("add_habit") {
             AddHabitScreen(
                 navController = navController,
-                habitViewModel = habitViewModel
+                habitViewModel = habitViewModel,
+                authViewModel = authViewModel
             )
         }
     }
