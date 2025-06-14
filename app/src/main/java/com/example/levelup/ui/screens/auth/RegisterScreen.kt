@@ -31,8 +31,9 @@ fun RegisterScreen(
     var confirmPassword by remember { mutableStateOf("") }
 
     LaunchedEffect(currentUser) {
+        println("LaunchedEffect: currentUser = $currentUser")
         if (currentUser != null) {
-            onNavigateToLogin()
+            onRegisterSuccess()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.levelup.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.levelup.data.firebase.FirestoreUserService
@@ -38,9 +39,13 @@ class AuthViewModel : ViewModel() {
                 val firebaseUser = authService.register(email, password)
                 firebaseUser?.let {
                     val user = User(uid = it.uid, displayName = displayName, email = email)
-                    userService.saveUser(user)
+                    try {
+                        userService.saveUser(user)
+                        _currentUser.value = user
+                    } catch (e: Exception) {
+                        _authError.value = "Error saving an user"
+                    }
                     _currentUser.value = user
-                    _registrationSuccess.value = "Account created successfully! Please log in."
                 }
             } catch (e: Exception) {
                 _authError.value = e.localizedMessage ?: "Registration failed"
