@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.levelup.data.firebase.FirestoreUserService
 import com.example.levelup.data.firebase.FirebaseAuthService
 import com.example.levelup.model.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,11 +26,52 @@ class AuthViewModel : ViewModel() {
     private val _registrationSuccess = MutableStateFlow<String?>(null)
     val registrationSuccess: StateFlow<String?> = _registrationSuccess
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     init {
         val firebaseUser = authService.currentUser
         if (firebaseUser != null) {
             viewModelScope.launch {
                 loadUser(firebaseUser.uid)
+            }
+        }
+    }
+
+    fun signInWithGoogle(idToken: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                clearAuthError()
+                val credential = GoogleAuthProvider.getCredential(idToken, null)
+                val firebaseUser = authService.signInWithCredential(credential)
+                firebaseUser?.let { user ->
+                    if (user.displayName != null) {
+                        // Sprawdź czy użytkownik już istnieje w Firestore
+                        val existingUser = try {
+                            userService.getUser(user.uid)
+                        } catch (e: Exception) {
+                            null
+                        }
+
+                        if (existingUser == null) {
+                            // Jeśli użytkownik nie istnieje, utwórz nowy
+                            val newUser = User(
+                                uid = user.uid,
+                                displayName = user.displayName ?: "",
+                                email = user.email ?: ""
+                            )
+                            userService.saveUser(newUser)
+                            _currentUser.value = newUser
+                        } else {
+                            _currentUser.value = existingUser
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                _authError.value = e.localizedMessage ?: "Google sign in failed"
+            } finally {
+                _isLoading.value = false
             }
         }
     }
