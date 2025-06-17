@@ -52,34 +52,12 @@ fun AchievementScreen(achievements: List<Achievement>) {
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Column {
-                    Text(
-                        text = achievement.title,
-                        color = if (achievement.achieved) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.surfaceVariant
-                    )
-                    Text(
-                        text = achievement.description,
-                        color = if (achievement.achieved) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.surfaceVariant
-                    )
+                    Text(text = achievement.title, color = if (achievement.achieved) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.surfaceVariant)
+                    Text(text = achievement.description, color = if (achievement.achieved) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.surfaceVariant)
 
-                    Spacer(modifier = Modifier.height(4.dp))
 
-                    Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = "Points",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Text(
-                            text = "${achievement.points} pts",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(start = 4.dp)
-                        )
-                    }
                 }
             }
         }
     }
 }
-
