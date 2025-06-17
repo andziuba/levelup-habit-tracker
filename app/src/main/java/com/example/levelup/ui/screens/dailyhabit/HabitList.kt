@@ -8,11 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.levelup.model.Habit
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
 import com.example.levelup.viewmodel.HabitViewModel
 import java.time.LocalDate
 
@@ -22,7 +19,13 @@ fun HabitListDisplay(
     date: LocalDate,
     viewModel: HabitViewModel
 ) {
-    if (habits.isEmpty()) {
+    val dayOfWeek = date.dayOfWeek
+
+    val visibleHabits = habits.filter { habit ->
+        habit.selectedDays.contains(dayOfWeek)
+    }
+
+    if (visibleHabits.isEmpty()) {
         Text(
             text = "No habits to display",
             style = MaterialTheme.typography.bodyLarge,
@@ -30,7 +33,7 @@ fun HabitListDisplay(
         )
     } else {
         Column(modifier = Modifier.fillMaxWidth()) {
-            habits.forEach { habit ->
+            visibleHabits.forEach { habit ->
                 HabitChecklistItem(
                     habit = habit,
                     date = date,
@@ -70,9 +73,9 @@ fun HabitChecklistItem(
                 },
                 enabled = !isFutureDate,
                 colors = CheckboxDefaults.colors(
-                    checkedColor = MaterialTheme.colorScheme.primary,
-                    uncheckedColor = MaterialTheme.colorScheme.primary,
-                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
+                    checkedColor = MaterialTheme.colorScheme.tertiary,
+                    uncheckedColor = MaterialTheme.colorScheme.tertiary,
+                    checkmarkColor = MaterialTheme.colorScheme.onTertiary
                 )
             )
             Spacer(modifier = Modifier.width(12.dp))

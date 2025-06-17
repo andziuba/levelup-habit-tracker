@@ -1,14 +1,19 @@
 package com.example.levelup.data.local
 
 import androidx.room.TypeConverter
-import com.example.levelup.model.Frequency
+import java.time.DayOfWeek
 
 class Converters {
     @TypeConverter
-    fun fromFrequency(value: Frequency): String = value.name
+    fun fromDayOfWeekSet(set: Set<DayOfWeek>): String {
+        return set.joinToString(",") { it.name }
+    }
 
     @TypeConverter
-    fun toFrequency(value: String): Frequency = Frequency.valueOf(value)
+    fun toDayOfWeekSet(value: String): Set<DayOfWeek> {
+        return if (value.isEmpty()) emptySet()
+        else value.split(",").map { DayOfWeek.valueOf(it) }.toSet()
+    }
 
     @TypeConverter
     fun fromMap(map: Map<String, Boolean>): String {
