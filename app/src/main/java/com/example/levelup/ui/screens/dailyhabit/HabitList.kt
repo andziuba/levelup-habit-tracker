@@ -17,6 +17,7 @@ import java.time.LocalDate
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.icons.outlined.Delete
 
 
 @Composable
@@ -61,12 +62,6 @@ fun HabitChecklistItem(
     val isFutureDate = date.isAfter(today)
     var showDialog by remember { mutableStateOf(false) }
 
-    val isDarkTheme = isSystemInDarkTheme()
-    val trashIconColor = if (isDarkTheme) {
-        MaterialTheme.colorScheme.surface
-    } else {
-        Color(0xFFaeaeae)
-    }
 
     if (showDialog) {
         AlertDialog(
@@ -129,9 +124,9 @@ fun HabitChecklistItem(
 
             IconButton(onClick = { showDialog = true }) {
                 Icon(
-                    imageVector = Icons.Default.Delete,
+                    imageVector = Icons.Outlined.Delete,
                     contentDescription = "Delete habit",
-                    tint = trashIconColor
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
