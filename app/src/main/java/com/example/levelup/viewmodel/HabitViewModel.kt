@@ -3,6 +3,7 @@ package com.example.levelup.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.levelup.data.firebase.FirestoreUserService
 import com.example.levelup.data.local.DatabaseBuilder
 import com.example.levelup.model.Habit
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ import java.time.ZoneId
 
 class HabitViewModel(application: Application) : AndroidViewModel(application) {
     private val habitDao = DatabaseBuilder.getInstance(application).habitDao()
+    private val firestoreUserService = FirestoreUserService()
 
     private val _habits = MutableStateFlow<List<Habit>>(emptyList())
     val habits: StateFlow<List<Habit>> = _habits
@@ -55,14 +57,28 @@ class HabitViewModel(application: Application) : AndroidViewModel(application) {
         }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     }
 
-    fun toggleHabitCompletion(habit: Habit, date: LocalDate, isCompleted: Boolean) {
+    fun toggleHabitCompletion(habit: Habit, date: LocalDate, isCompleted: Boolean, authViewModel: AuthViewModel) {
         viewModelScope.launch(Dispatchers.IO) {
             val dateKey = date.toString()
-            val newCompletions = habit.completions.toMutableMap().apply {
-                this[dateKey] = isCompleted
+            val wasCompleted = habit.completions[dateKey] ?: false
+
+            if (isCompleted != wasCompleted) {
+                val newCompletions = habit.completions.toMutableMap().apply {
+                    this[dateKey] = isCompleted
+                }
+                habitDao.updateCompletions(habit.id, newCompletions)
+
+                // Aktualizuj punkty tylko jeśli zmieniamy na completed
+                if (isCompleted) {
+                    val pointsToAdd = habit.points
+                    authViewModel.currentUser.value?.uid?.let { userId ->
+                        firestoreUserService.updateUserScore(userId, pointsToAdd)
+                        authViewModel.updateLocalUserScore(pointsToAdd)
+                    }
+                }
+
+                habit.userId.let { loadHabitsForUser(it) }
             }
-            habitDao.updateCompletions(habit.id, newCompletions)
-            habit.userId.let { loadHabitsForUser(it) }
         }
     }
 
