@@ -116,12 +116,15 @@ fun HabitChecklistItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                // Modified Checkbox - disabled when completed
                 Checkbox(
                     checked = isCompleted,
                     onCheckedChange = { isChecked ->
-                        viewModel.toggleHabitCompletion(habit, date, isChecked, authViewModel)
+                        if (!isCompleted) { // Only allow checking, not unchecking
+                            viewModel.toggleHabitCompletion(habit, date, isChecked, authViewModel)
+                        }
                     },
-                    enabled = !isFutureDate,
+                    enabled = !isFutureDate && !isCompleted, // Disable if already completed
                     colors = CheckboxDefaults.colors(
                         checkedColor = MaterialTheme.colorScheme.tertiary,
                         uncheckedColor = MaterialTheme.colorScheme.tertiary,
@@ -140,7 +143,6 @@ fun HabitChecklistItem(
                     )
 
                     Row {
-                        // Display points with an icon
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = "Points",
@@ -156,7 +158,6 @@ fun HabitChecklistItem(
 
                         Spacer(modifier = Modifier.width(12.dp))
 
-                        // Display duration
                         Icon(
                             imageVector = Icons.Default.Schedule,
                             contentDescription = "Duration",
@@ -174,7 +175,8 @@ fun HabitChecklistItem(
 
                 IconButton(
                     onClick = { showDialog = true },
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
+                    enabled = !isCompleted // Disable delete button for completed habits
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Delete,
@@ -184,7 +186,6 @@ fun HabitChecklistItem(
                 }
             }
 
-            // Visual indicator of completion status
             if (isCompleted) {
                 Spacer(modifier = Modifier.height(4.dp))
                 LinearProgressIndicator(
