@@ -30,10 +30,10 @@ fun LeaderboardScreen(viewModel: AuthViewModel) {
         viewModel.loadFriends()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)
+
     ) {
         Text(
             text = "Leaderboard",
