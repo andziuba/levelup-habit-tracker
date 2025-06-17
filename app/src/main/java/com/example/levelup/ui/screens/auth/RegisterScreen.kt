@@ -1,5 +1,6 @@
 package com.example.levelup.ui.screens.auth
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -10,10 +11,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.levelup.R
 import com.example.levelup.viewmodel.AuthViewModel
 
 @Composable
@@ -48,6 +51,14 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo1),
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .width(150.dp)
+                    .aspectRatio(2f)
+            )
+
             Text(
                 text = "Create Account",
                 style = MaterialTheme.typography.headlineMedium,
