@@ -1,6 +1,5 @@
 package com.example.levelup.ui.screens.monthlycalendar
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,36 +26,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.example.levelup.ui.screens.dailyhabit.HabitListDisplay
 import androidx.compose.runtime.*
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.levelup.viewmodel.CalendarViewModel
 
 @Composable
 fun MonthlyCalendarScreen(
     modifier: Modifier = Modifier,
     habitViewModel: HabitViewModel,
-    authViewModel: AuthViewModel,
-    calendarViewModel: CalendarViewModel = viewModel()
+    authViewModel: AuthViewModel
 ) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-
-    val eventsForDate = calendarViewModel.getEventsForDate(selectedDate)
-
     val currentMonth = YearMonth.from(selectedDate)
     val daysInMonth = currentMonth.lengthOfMonth()
     val firstDayOfMonth = currentMonth.atDay(1)
     val dayOfWeekOffset = firstDayOfMonth.dayOfWeek.value % 7 // Adjust for Sunday start (0)
 
+    // Pobierz nawyki z ViewModel
     val habits by habitViewModel.habits.collectAsState()
-
-    LaunchedEffect(Unit) {
-        val accessToken = authViewModel.currentUser.value?.accessToken
-        if (!accessToken.isNullOrEmpty()) {
-            calendarViewModel.fetchEvents(accessToken)
-        } else {
-            Log.e("Calendar", "Brak tokenu dostępu")
-        }
-    }
-
 
     Column(modifier = modifier.fillMaxSize()) {
         // Month and year header
@@ -169,21 +153,6 @@ fun MonthlyCalendarScreen(
             viewModel = habitViewModel,
             authViewModel = authViewModel
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "Wydarzenia z Google Calendar:", style = MaterialTheme.typography.titleMedium)
-
-        if (eventsForDate.isEmpty()) {
-            Text("Brak wydarzeń na ten dzień")
-        } else {
-            eventsForDate.forEach { event ->
-                Text(
-                    text = "- ${event.summary} (${event.start.toLocalTime()} - ${event.end.toLocalTime()})",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
 
     }
 }
