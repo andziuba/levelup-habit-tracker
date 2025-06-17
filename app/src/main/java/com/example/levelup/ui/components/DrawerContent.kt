@@ -19,6 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Alignment
 import com.example.levelup.R
 
+fun calculateLevel(exp: Int): Pair<Int, Int> {
+    val level = exp / 100 + 1
+    val expToNextLevel = 100 - (exp % 100)
+    return Pair(level, expToNextLevel)
+}
+
 @Composable
 fun DrawerContent(
     onLogoutClicked: () -> Unit,
@@ -34,6 +40,10 @@ fun DrawerContent(
     onNavigateToLeaderboard: () -> Unit,
     onNavigateToMonth: () -> Unit
 ) {
+    val currentLevel = score / 100 + 1
+    val expInCurrentLevel = score % 100
+    val progress = expInCurrentLevel / 100f
+
     ModalDrawerSheet(
         modifier = Modifier.fillMaxHeight(),
         drawerContainerColor = MaterialTheme.colorScheme.surface,
@@ -47,7 +57,7 @@ fun DrawerContent(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 4.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.icon),
@@ -71,11 +81,45 @@ fun DrawerContent(
                     )
                 }
 
-                // Theme switch in top right corner
                 Switch(
                     checked = isDarkTheme,
                     onCheckedChange = { onThemeChange(it) },
                     modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+
+            // Nowy wiersz z informacją o poziomie
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Level $currentLevel",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+
+                    Text(
+                        text = "$expInCurrentLevel/100",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                LinearProgressIndicator(
+                    progress = progress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .padding(top = 4.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             }
         }
