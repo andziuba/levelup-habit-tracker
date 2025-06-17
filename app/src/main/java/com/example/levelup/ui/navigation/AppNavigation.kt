@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.levelup.ui.components.BottomNavItem
 import com.example.levelup.ui.screens.dailyhabit.DailyHabitScreen
 import com.example.levelup.ui.screens.dailyhabit.AddHabitScreen
+import com.example.levelup.ui.screens.friends.FriendsScreen
 import com.example.levelup.viewmodel.HabitViewModel
 import com.example.levelup.viewmodel.AuthViewModel
 
@@ -35,6 +36,9 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
                 habitViewModel = habitViewModel,
                 authViewModel = authViewModel
             )
+        }
+        composable("friends") {
+            FriendsScreen(viewModel = authViewModel)
         }
     }
 }

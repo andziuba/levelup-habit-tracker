@@ -8,7 +8,6 @@ import com.example.levelup.data.firebase.FirebaseAuthService
 import com.example.levelup.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -29,6 +28,12 @@ class AuthViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _addFriendStatus = MutableStateFlow<String?>(null)
+    val addFriendStatus: StateFlow<String?> = _addFriendStatus
+
+    private val _friends = MutableStateFlow<List<User>>(emptyList())
+    val friends: StateFlow<List<User>> = _friends
+
     init {
         val firebaseUser = authService.currentUser
         if (firebaseUser != null) {
@@ -37,6 +42,64 @@ class AuthViewModel : ViewModel() {
             }
         }
     }
+
+    fun loadFriends() {
+        val currentUid = _currentUser.value?.uid ?: return
+        viewModelScope.launch {
+            try {
+                _friends.value = userService.getFriends(currentUid)
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Failed to load friends", e)
+            }
+        }
+    }
+
+    fun addFriendByEmail(email: String) {
+        val currentUid = _currentUser.value?.uid ?: return
+
+        viewModelScope.launch {
+            try {
+                val userToAdd = userService.getUserByEmail(email)
+                if (userToAdd == null) {
+                    _addFriendStatus.value = "User with this email doesn't exist"
+                    return@launch
+                }
+
+                val currentUser = _currentUser.value
+                if (currentUser == null) {
+                    _addFriendStatus.value = "Current user not loaded"
+                    return@launch
+                }
+
+                // Check if friend is already added
+                val friendIds = currentUser.friends ?: emptyList()
+                if (userToAdd.uid in friendIds) {
+                    _addFriendStatus.value = "User is already your friend"
+                    return@launch
+                }
+
+                // Add friend
+                userService.addFriend(currentUid, userToAdd.uid)
+                _addFriendStatus.value = "Friend added successfully"
+
+                // Reload friends list to update UI
+                loadFriends()
+
+                // Also update currentUser with new friends list (optional)
+                val updatedFriends = friendIds + userToAdd.uid
+                _currentUser.value = currentUser.copy(friends = updatedFriends)
+
+            } catch (e: Exception) {
+                _addFriendStatus.value = "Failed to add friend"
+            }
+        }
+    }
+
+
+    fun clearAddFriendStatus() {
+        _addFriendStatus.value = null
+    }
+
 
     fun signInWithGoogle(idToken: String) {
         _isLoading.value = true
