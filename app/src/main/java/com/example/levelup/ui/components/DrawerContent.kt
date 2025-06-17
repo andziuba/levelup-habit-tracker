@@ -3,6 +3,10 @@ package com.example.levelup.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,13 +18,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Alignment
 import com.example.levelup.R
 
-
 @Composable
 fun DrawerContent(
     onLogoutClicked: () -> Unit,
     drawerState: DrawerState,
     scope: CoroutineScope,
-    displayName: String
+    displayName: String,
+    score: Int,
+    isDarkTheme: Boolean,
+    onThemeChange: (Boolean) -> Unit,
+    onNavigateToDailyHabits: () -> Unit,
+    onNavigateToAddHabit: () -> Unit,
+    onNavigateToFriends: () -> Unit,
+    onNavigateToLeaderboard: () -> Unit
 ) {
     ModalDrawerSheet(
         modifier = Modifier.fillMaxHeight(),
@@ -35,10 +45,9 @@ fun DrawerContent(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 8.dp)
             ) {
-                // Replace `R.drawable.your_icon` with your actual drawable resource name
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.icon),
                     contentDescription = null,
                     modifier = Modifier
@@ -46,41 +55,95 @@ fun DrawerContent(
                         .padding(end = 8.dp),
                 )
 
-                Text(
-                    text = displayName,
-                    style = MaterialTheme.typography.titleLarge
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = displayName,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "$score points",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                // Theme switch in top right corner
+                Switch(
+                    checked = isDarkTheme,
+                    onCheckedChange = { onThemeChange(it) },
+                    modifier = Modifier.padding(start = 8.dp)
                 )
             }
         }
 
-        // 🔹 Stylish Divider
+        // Divider
         HorizontalDivider(
             color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
 
+        // Navigation items
+        NavigationDrawerItem(
+            label = { Text("Today's Habits") },
+            icon = { Icon(Icons.Filled.Today, contentDescription = "Daily Habits") },
+            selected = false,
+            onClick = {
+                scope.launch { drawerState.close() }
+                onNavigateToDailyHabits()
+            },
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+
+        NavigationDrawerItem(
+            label = { Text("Add Habit") },
+            icon = { Icon(Icons.Filled.Add, contentDescription = "Add Habit") },
+            selected = false,
+            onClick = {
+                scope.launch { drawerState.close() }
+                onNavigateToAddHabit()
+            },
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+
+        NavigationDrawerItem(
+            label = { Text("Friends") },
+            icon = { Icon(Icons.Filled.Group, contentDescription = "Friends") },
+            selected = false,
+            onClick = {
+                scope.launch { drawerState.close() }
+                onNavigateToFriends()
+            },
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+
+        NavigationDrawerItem(
+            label = { Text("Leaderboard") },
+            icon = { Icon(Icons.Filled.Leaderboard, contentDescription = "Leaderboard") },
+            selected = false,
+            onClick = {
+                scope.launch { drawerState.close() }
+                onNavigateToLeaderboard()
+            },
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+
         Spacer(modifier = Modifier.weight(1f))
 
+        // Logout button
         NavigationDrawerItem(
             label = { Text("Logout") },
             icon = { Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout") },
             selected = false,
             onClick = {
-                scope.launch {
-                    drawerState.close()
-                }
+                scope.launch { drawerState.close() }
                 onLogoutClicked()
             },
             colors = NavigationDrawerItemDefaults.colors(
-                unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-                selectedTextColor = MaterialTheme.colorScheme.onSurface,
-                selectedIconColor = MaterialTheme.colorScheme.onSurface,
-                unselectedIconColor = MaterialTheme.colorScheme.onSurface,
-                selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                unselectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
+            modifier = Modifier.padding(16.dp)
         )
     }
 }

@@ -20,16 +20,20 @@ import com.example.levelup.ui.navigation.AppNavigation
 import com.example.levelup.ui.navigation.AuthNavigation
 import com.example.levelup.ui.theme.LevelUpTheme
 import com.example.levelup.viewmodel.AuthViewModel
+import com.example.levelup.viewmodel.ThemeViewModel
 import com.example.levelup.ui.components.TopMenuButton
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel by viewModels()
+    private val themeViewModel: ThemeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LevelUpTheme {
+            val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+
+            LevelUpTheme(darkTheme = isDarkTheme) {
                 val currentUser by authViewModel.currentUser.collectAsState()
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -51,10 +55,17 @@ class MainActivity : ComponentActivity() {
                         drawerState = drawerState,
                         drawerContent = {
                             DrawerContent(
+                                onLogoutClicked = { authViewModel.logout() },
                                 drawerState = drawerState,
                                 scope = scope,
-                                onLogoutClicked = { authViewModel.logout() },
-                                displayName = currentUser?.displayName ?: ""
+                                displayName = authViewModel.currentUser.value?.displayName ?: "User",
+                                score = authViewModel.currentUser.value?.score ?: 0,
+                                isDarkTheme = isDarkTheme,
+                                onThemeChange = { themeViewModel.toggleTheme() },
+                                onNavigateToDailyHabits = { navController.navigate("daily_habits") },
+                                onNavigateToAddHabit = { navController.navigate("add_habit") },
+                                onNavigateToFriends = { navController.navigate("friends") },
+                                onNavigateToLeaderboard = { navController.navigate("leaderboard") }
                             )
                         }
                     ) {
@@ -84,7 +95,6 @@ class MainActivity : ComponentActivity() {
                                         .padding(16.dp)
                                 )
                             }
-
                         }
                     }
                 }
