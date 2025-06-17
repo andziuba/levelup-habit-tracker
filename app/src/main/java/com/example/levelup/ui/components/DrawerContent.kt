@@ -9,6 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Alignment
+import com.example.levelup.R
 
 
 @Composable
@@ -29,10 +33,24 @@ fun DrawerContent(
                 .fillMaxWidth()
                 .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 12.dp)
         ) {
-            Text(
-                text = displayName,
-                style = MaterialTheme.typography.titleLarge
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                // Replace `R.drawable.your_icon` with your actual drawable resource name
+                Icon(
+                    painter = painterResource(id = R.drawable.icon),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(50.dp)
+                        .padding(end = 8.dp),
+                )
+
+                Text(
+                    text = displayName,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         }
 
         // 🔹 Stylish Divider
