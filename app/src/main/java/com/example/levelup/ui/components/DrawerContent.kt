@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.Image
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Alignment
 import com.example.levelup.R
@@ -30,7 +31,8 @@ fun DrawerContent(
     onNavigateToDailyHabits: () -> Unit,
     onNavigateToAddHabit: () -> Unit,
     onNavigateToFriends: () -> Unit,
-    onNavigateToLeaderboard: () -> Unit
+    onNavigateToLeaderboard: () -> Unit,
+    onNavigateToMonth: () -> Unit
 ) {
     ModalDrawerSheet(
         modifier = Modifier.fillMaxHeight(),
@@ -92,6 +94,18 @@ fun DrawerContent(
             onClick = {
                 scope.launch { drawerState.close() }
                 onNavigateToDailyHabits()
+            },
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+
+        //Monthly View
+        NavigationDrawerItem(
+            label = { Text("Monthly") },
+            icon = { Icon(Icons.Filled.CalendarMonth, contentDescription = "Month") },
+            selected = false,
+            onClick = {
+                scope.launch { drawerState.close() }
+                onNavigateToMonth()
             },
             modifier = Modifier.padding(horizontal = 12.dp)
         )

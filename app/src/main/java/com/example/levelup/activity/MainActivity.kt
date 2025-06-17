@@ -65,7 +65,8 @@ class MainActivity : ComponentActivity() {
                                 onNavigateToDailyHabits = { navController.navigate("daily_habits") },
                                 onNavigateToAddHabit = { navController.navigate("add_habit") },
                                 onNavigateToFriends = { navController.navigate("friends") },
-                                onNavigateToLeaderboard = { navController.navigate("leaderboard") }
+                                onNavigateToLeaderboard = { navController.navigate("leaderboard") },
+                                onNavigateToMonth = { navController.navigate("monthly_calendar") }
                             )
                         }
                     ) {

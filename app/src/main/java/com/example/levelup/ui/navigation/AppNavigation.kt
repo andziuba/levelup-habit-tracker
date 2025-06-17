@@ -11,6 +11,7 @@ import com.example.levelup.ui.screens.dailyhabit.DailyHabitScreen
 import com.example.levelup.ui.screens.dailyhabit.AddHabitScreen
 import com.example.levelup.ui.screens.friends.FriendsScreen
 import com.example.levelup.ui.screens.leaderboard.LeaderboardScreen
+import com.example.levelup.ui.screens.monthlycalendar.MonthlyCalendarScreen
 import com.example.levelup.viewmodel.HabitViewModel
 import com.example.levelup.viewmodel.AuthViewModel
 
@@ -31,6 +32,24 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
                 authViewModel = authViewModel
             )
         }
+
+        composable("daily_habits") {
+            DailyHabitScreen(
+                navController = navController,
+                habitViewModel = habitViewModel,
+                authViewModel = authViewModel
+            )
+        }
+
+
+        composable("monthly_calendar") {
+            MonthlyCalendarScreen(
+                habitViewModel = habitViewModel,
+                authViewModel = authViewModel
+            )
+        }
+
+
         composable("add_habit") {
             AddHabitScreen(
                 navController = navController,
