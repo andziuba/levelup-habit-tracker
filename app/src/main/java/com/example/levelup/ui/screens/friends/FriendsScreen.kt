@@ -36,6 +36,11 @@ fun FriendsScreen(viewModel: AuthViewModel) {
     )
 
     {
+        Text(
+            text = "Friends",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
         OutlinedTextField(
             value = friendEmail.value,

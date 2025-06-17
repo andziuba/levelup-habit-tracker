@@ -69,4 +69,13 @@ class HabitViewModel(application: Application) : AndroidViewModel(application) {
     fun isHabitCompletedForDate(habit: Habit, date: LocalDate): Boolean {
         return habit.completions[date.toString()] ?: false
     }
+
+    val habitsCount: Int
+        get() = _habits.value.size
+
+    fun habitsDoneCountForDate(date: LocalDate): Int {
+        return _habits.value.count { habit ->
+            habit.completions[date.toString()] == true
+        }
+    }
 }
