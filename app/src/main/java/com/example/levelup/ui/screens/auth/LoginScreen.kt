@@ -27,6 +27,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import com.example.levelup.R
+import com.google.android.gms.common.api.Scope
+import com.google.android.gms.common.Scopes
+
 
 @Composable
 fun LoginScreen(
@@ -50,6 +53,7 @@ fun LoginScreen(
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
+            .requestScopes(Scope("https://www.googleapis.com/auth/calendar.readonly"))
             .build()
     )
 
@@ -60,7 +64,7 @@ fun LoginScreen(
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             val account = task.getResult(ApiException::class.java)
             account.idToken?.let { token ->
-                viewModel.signInWithGoogle(token)
+                viewModel.signInWithGoogle(context, token)
             }
         } catch (e: ApiException) {
             viewModel.setAuthError("Google sign in failed: ${e.localizedMessage}")

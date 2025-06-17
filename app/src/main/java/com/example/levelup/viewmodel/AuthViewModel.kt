@@ -12,6 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import android.content.Context
+import com.google.android.gms.auth.GoogleAuthUtil
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 
 class AuthViewModel : ViewModel() {
     private val authService = FirebaseAuthService()
@@ -102,7 +107,7 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun signInWithGoogle(idToken: String) {
+    fun signInWithGoogle(context: Context, idToken: String) {
         _isLoading.value = true
         viewModelScope.launch {
             try {
@@ -120,10 +125,12 @@ class AuthViewModel : ViewModel() {
 
                         if (existingUser == null) {
                             // Jeśli użytkownik nie istnieje, utwórz nowy
+                            val accessToken = getGoogleAccessToken(context)
                             val newUser = User(
                                 uid = user.uid,
                                 displayName = user.displayName ?: "",
-                                email = user.email ?: ""
+                                email = user.email ?: "",
+                                accessToken = accessToken
                             )
                             userService.saveUser(newUser)
                             _currentUser.value = newUser
@@ -221,4 +228,26 @@ class AuthViewModel : ViewModel() {
         authService.logout()
         _currentUser.value = null
     }
+
+
+    suspend fun getGoogleAccessToken(context: Context): String? {
+        val account = GoogleSignIn.getLastSignedInAccount(context)?.account
+        val scope = "oauth2:https://www.googleapis.com/auth/calendar.readonly"
+
+        if (account == null) {
+            Log.e("Auth", "No signed in account found")
+            return null
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                GoogleAuthUtil.getToken(context, account, scope)
+            } catch (e: Exception) {
+                Log.e("Auth", "Failed to get token", e)
+                null
+            }
+        }
+    }
+
+
 }

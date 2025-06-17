@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.levelup.ui.components.BottomNav
@@ -24,10 +25,13 @@ import com.example.levelup.viewmodel.ThemeViewModel
 import com.example.levelup.ui.components.TopMenuButton
 import kotlinx.coroutines.launch
 import com.example.levelup.ui.screens.splash.SplashScreen
+import com.example.levelup.viewmodel.CalendarViewModel
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel by viewModels()
     private val themeViewModel: ThemeViewModel by viewModels()
+    private val calendarViewModel: CalendarViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +40,6 @@ class MainActivity : ComponentActivity() {
             val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
             var showSplash by remember { mutableStateOf(true) }
 
-
             LevelUpTheme(darkTheme = isDarkTheme) {
                 if (showSplash) {
                     SplashScreen(
@@ -44,12 +47,25 @@ class MainActivity : ComponentActivity() {
                         onAnimationComplete = { showSplash = false }
                     )
                 } else {
-                    val currentUser by authViewModel.currentUser.collectAsState()
+                    val currentUserState by authViewModel.currentUser.collectAsState()
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
 
                     val showTopMenu = currentRoute !in listOf("add_habit")
+
+                    val currentUser = currentUserState
+
+                    LaunchedEffect(currentUser) {
+                        if (currentUser != null) {
+                            val token = authViewModel.getGoogleAccessToken(
+                                context = this@MainActivity
+                            )
+                            if (token != null) {
+                                calendarViewModel.fetchEvents(token)
+                            }
+                        }
+                    }
 
                     if (currentUser == null) {
                         AuthNavigation(

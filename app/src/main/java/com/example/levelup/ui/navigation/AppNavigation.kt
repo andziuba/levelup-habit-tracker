@@ -18,6 +18,7 @@ import com.example.levelup.ui.screens.monthlycalendar.MonthlyCalendarScreen
 import com.example.levelup.viewmodel.AchievementViewModel
 import com.example.levelup.viewmodel.HabitViewModel
 import com.example.levelup.viewmodel.AuthViewModel
+import com.example.levelup.viewmodel.CalendarViewModel
 import androidx.compose.runtime.getValue
 
 
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
     val habitViewModel: HabitViewModel = viewModel()
     val authViewModel: AuthViewModel = viewModel()
+    val calendarViewModel: CalendarViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -51,7 +53,8 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         composable("monthly_calendar") {
             MonthlyCalendarScreen(
                 habitViewModel = habitViewModel,
-                authViewModel = authViewModel
+                authViewModel = authViewModel,
+                calendarViewModel = calendarViewModel
             )
         }
 

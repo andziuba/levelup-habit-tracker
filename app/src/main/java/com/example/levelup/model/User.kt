@@ -5,5 +5,6 @@ data class User(
     val displayName: String = "",
     val email: String = "",
     val score: Int = 0,
-    val friends: List<String> = emptyList()
+    val friends: List<String> = emptyList(),
+    val accessToken: String? = null
 )
