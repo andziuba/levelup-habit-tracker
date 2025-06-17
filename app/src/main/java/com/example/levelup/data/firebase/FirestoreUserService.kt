@@ -49,5 +49,7 @@ class FirestoreUserService {
         return docs.mapNotNull { it.toObject(User::class.java) }
     }
 
-
+    suspend fun updateUserScore(uid: String, pointsToAdd: Int) {
+        usersCollection.document(uid).update("score", FieldValue.increment(pointsToAdd.toLong())).await()
+    }
 }

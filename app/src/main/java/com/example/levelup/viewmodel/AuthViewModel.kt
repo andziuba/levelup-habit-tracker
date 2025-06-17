@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -172,6 +173,25 @@ class AuthViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _authError.value = "Incorrect email or password"
+            }
+        }
+    }
+
+//    fun addToUserScore(points: Int) {
+//        viewModelScope.launch {
+//            currentUser.value?.let { user ->
+//                val newScore = user.score + points
+//                // Update in Firebase or your backend
+//                updateUserScore(newScore)
+//            }
+//        }
+//    }
+//
+
+    fun updateLocalUserScore(pointsToAdd: Int) {
+        viewModelScope.launch {
+            _currentUser.update { currentUser ->
+                currentUser?.copy(score = (currentUser.score ?: 0) + pointsToAdd)
             }
         }
     }

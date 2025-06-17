@@ -60,7 +60,8 @@ fun DailyHabitScreen(
             HabitListDisplay(
                 habits = habits,
                 date = selectedDate,
-                viewModel = habitViewModel
+                viewModel = habitViewModel,
+                authViewModel = authViewModel
             )
         }
     }

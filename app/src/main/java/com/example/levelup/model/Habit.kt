@@ -15,4 +15,11 @@ data class Habit(
     val createdAt: Long = System.currentTimeMillis(),
     val userId: String,
     val completions: Map<String, Boolean> = emptyMap()
-) : Serializable
+) : Serializable {
+   val points: Int
+        get() {
+            val durationPoints = (hours * 60 + minutes) / 5 // 1 point per 5 minutes
+            val frequencyPoints = selectedDays.size * 2 // 2 points per selected day
+            return durationPoints * frequencyPoints
+        }
+}

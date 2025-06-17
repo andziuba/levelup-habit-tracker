@@ -150,7 +150,8 @@ fun MonthlyCalendarScreen(
         HabitListDisplay(
             habits = dailyHabits,
             date = selectedDate,
-            viewModel = habitViewModel
+            viewModel = habitViewModel,
+            authViewModel = authViewModel
         )
 
     }
