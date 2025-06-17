@@ -51,13 +51,12 @@ fun HabitChecklistItem(
     val isCompleted = viewModel.isHabitCompletedForDate(habit, date)
     val isFutureDate = date.isAfter(today)
 
-    Surface(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp, horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(width = 2.dp, color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(12.dp)),
-        color = MaterialTheme.colorScheme.surfaceVariant
+            .padding(vertical = 4.dp, horizontal = 16.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Row(
             modifier = Modifier
@@ -72,7 +71,8 @@ fun HabitChecklistItem(
                 enabled = !isFutureDate,
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
-                    uncheckedColor = MaterialTheme.colorScheme.primary
+                    uncheckedColor = MaterialTheme.colorScheme.primary,
+                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
             Spacer(modifier = Modifier.width(12.dp))

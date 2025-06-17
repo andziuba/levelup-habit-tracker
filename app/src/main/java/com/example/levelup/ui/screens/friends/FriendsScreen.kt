@@ -12,11 +12,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.levelup.model.User
-
 
 @Composable
 fun FriendsScreen(viewModel: AuthViewModel) {
@@ -40,7 +41,8 @@ fun FriendsScreen(viewModel: AuthViewModel) {
             value = friendEmail.value,
             onValueChange = { friendEmail.value = it },
             label = { Text("Enter friend's email") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -48,9 +50,10 @@ fun FriendsScreen(viewModel: AuthViewModel) {
         Button(
             onClick = {
                 viewModel.addFriendByEmail(friendEmail.value)
-                viewModel.loadFriends() // reload after adding
+                viewModel.loadFriends()
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
         ) {
             Text("Add Friend")
         }
@@ -91,7 +94,8 @@ fun FriendItem(friend: User) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -101,7 +105,7 @@ fun FriendItem(friend: User) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onPrimary),
+                    .background(MaterialTheme.colorScheme.surface),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -116,7 +120,8 @@ fun FriendItem(friend: User) {
             Column {
                 Text(
                     text = friend.displayName,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = friend.email,

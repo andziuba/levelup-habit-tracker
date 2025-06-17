@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.levelup.ui.components.BottomNav
 import com.example.levelup.ui.components.DrawerContent
@@ -31,6 +32,10 @@ class MainActivity : ComponentActivity() {
             LevelUpTheme {
                 val currentUser by authViewModel.currentUser.collectAsState()
                 val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+
+                val showTopMenu = currentRoute !in listOf("add_habit")
 
                 if (currentUser == null) {
                     AuthNavigation(
@@ -66,17 +71,20 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
 
-                            TopMenuButton(
-                                onClick = {
-                                    scope.launch {
-                                        if (drawerState.isClosed) drawerState.open()
-                                        else drawerState.close()
-                                    }
-                                },
-                                modifier = Modifier
-                                    .align(Alignment.TopStart)
-                                    .padding(16.dp)
-                            )
+                            if (showTopMenu) {
+                                TopMenuButton(
+                                    onClick = {
+                                        scope.launch {
+                                            if (drawerState.isClosed) drawerState.open()
+                                            else drawerState.close()
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .align(Alignment.TopStart)
+                                        .padding(16.dp)
+                                )
+                            }
+
                         }
                     }
                 }
