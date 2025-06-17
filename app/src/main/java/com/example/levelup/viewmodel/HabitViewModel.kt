@@ -37,6 +37,13 @@ class HabitViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun deleteHabit(habit: Habit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            habitDao.deleteHabit(habit)
+            habit.userId.let { loadHabitsForUser(it) }
+        }
+    }
+
     fun getHabitsForDate(date: LocalDate): StateFlow<List<Habit>> {
         return habits.map { list ->
             list.filter { habit ->

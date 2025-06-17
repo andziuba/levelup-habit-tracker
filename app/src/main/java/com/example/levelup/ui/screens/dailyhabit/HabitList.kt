@@ -2,6 +2,8 @@ package com.example.levelup.ui.screens.dailyhabit
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,6 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import com.example.levelup.viewmodel.HabitViewModel
 import java.time.LocalDate
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.isSystemInDarkTheme
+
 
 @Composable
 fun HabitListDisplay(
@@ -53,6 +59,37 @@ fun HabitChecklistItem(
 ) {
     val isCompleted = viewModel.isHabitCompletedForDate(habit, date)
     val isFutureDate = date.isAfter(today)
+    var showDialog by remember { mutableStateOf(false) }
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val trashIconColor = if (isDarkTheme) {
+        MaterialTheme.colorScheme.surface
+    } else {
+        Color(0xFFaeaeae)
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Delete Habit") },
+            text = { Text("Are you sure you want to delete \"${habit.name}\"?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteHabit(habit)
+                        showDialog = false
+                    }
+                ) {
+                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 
     Card(
         modifier = Modifier
@@ -63,7 +100,8 @@ fun HabitChecklistItem(
     ) {
         Row(
             modifier = Modifier
-                .padding(vertical = 6.dp, horizontal = 16.dp),
+                .padding(vertical = 6.dp, horizontal = 16.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
@@ -78,12 +116,24 @@ fun HabitChecklistItem(
                     checkmarkColor = MaterialTheme.colorScheme.onTertiary
                 )
             )
+
             Spacer(modifier = Modifier.width(12.dp))
+
             Text(
                 text = habit.name,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(onClick = { showDialog = true }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete habit",
+                    tint = trashIconColor
+                )
+            }
         }
     }
 }
