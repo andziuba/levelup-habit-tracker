@@ -115,6 +115,14 @@ fun LoginScreen(
                 )
             }
 
+            Image(
+                painter = painterResource(id = R.drawable.logo1),
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .width(150.dp)
+                    .aspectRatio(2f)
+            )
+
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
