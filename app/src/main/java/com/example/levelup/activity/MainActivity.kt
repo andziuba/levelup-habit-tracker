@@ -47,16 +47,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
             var showSplash by remember { mutableStateOf(true) }
+            var authCheckCompleted by remember { mutableStateOf(false) }
+            val currentUser by authViewModel.currentUser.collectAsState()
 
+            // Check authentication state when composable is first launched
+            LaunchedEffect(Unit) {
+                authViewModel.currentUser.collect {
+                    authCheckCompleted = true
+                }
+            }
 
             LevelUpTheme(darkTheme = isDarkTheme) {
-                if (showSplash) {
+                if (showSplash || !authCheckCompleted) {
                     SplashScreen(
                         modifier = Modifier.fillMaxSize(),
                         onAnimationComplete = { showSplash = false }
                     )
                 } else {
-                    val currentUser by authViewModel.currentUser.collectAsState()
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
