@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.levelup.ui.components.AppTopBar
 import com.example.levelup.ui.components.BottomNav
 import com.example.levelup.ui.components.DrawerContent
 import com.example.levelup.ui.navigation.AppNavigation
@@ -21,7 +22,6 @@ import com.example.levelup.ui.navigation.AuthNavigation
 import com.example.levelup.ui.theme.LevelUpTheme
 import com.example.levelup.viewmodel.AuthViewModel
 import com.example.levelup.viewmodel.ThemeViewModel
-import com.example.levelup.ui.components.TopMenuButton
 import kotlinx.coroutines.launch
 import com.example.levelup.ui.screens.splash.SplashScreen
 
@@ -29,6 +29,18 @@ class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel by viewModels()
     private val themeViewModel: ThemeViewModel by viewModels()
 
+    private fun routeToTitle(route: String): String {
+        return when (route) {
+            "daily_habits" -> "LevelUP"
+            "friends" -> "Friends"
+            "leaderboard" -> "Leaderboard"
+            "achievements" -> "Achievements"
+            "monthly_calendar" -> "Monthly View"
+            else -> "LevelUP"
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -83,6 +95,15 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Scaffold(
+                                    topBar = {
+                                        if (showTopMenu) {
+                                            AppTopBar(
+                                                title = currentRoute?.let { routeToTitle(it) } ?: "",
+                                                scope = scope,
+                                                drawerState = drawerState
+                                            )
+                                        }
+                                    },
                                     bottomBar = { BottomNav(navController) },
                                     content = { innerPadding ->
                                         Box(modifier = Modifier.padding(innerPadding)) {
@@ -93,20 +114,6 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 )
-
-                                if (showTopMenu) {
-                                    TopMenuButton(
-                                        onClick = {
-                                            scope.launch {
-                                                if (drawerState.isClosed) drawerState.open()
-                                                else drawerState.close()
-                                            }
-                                        },
-                                        modifier = Modifier
-                                            .align(Alignment.TopStart)
-                                            .padding(16.dp)
-                                    )
-                                }
                             }
                         }
                     }

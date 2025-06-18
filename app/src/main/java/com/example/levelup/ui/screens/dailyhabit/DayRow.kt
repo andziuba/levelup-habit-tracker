@@ -58,7 +58,7 @@ fun DayRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
-            .padding(top = 7.dp)
+            .padding(top = 4.dp)
     ) {
         Text(
             text = headerText,

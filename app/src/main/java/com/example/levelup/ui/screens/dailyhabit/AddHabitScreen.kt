@@ -54,7 +54,6 @@ fun AddHabitScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.add_new_habit),
-                        fontSize = 18.sp
                     )
                 },
                 navigationIcon = {
@@ -71,8 +70,9 @@ fun AddHabitScreen(
                     navigationIconContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )
+
+
         },
-        bottomBar = { },
         content = { innerPadding ->
             Column(
                 modifier = Modifier

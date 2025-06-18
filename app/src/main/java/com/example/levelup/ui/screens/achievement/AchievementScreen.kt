@@ -19,14 +19,8 @@ fun AchievementScreen(achievements: List<Achievement>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)
+            .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
     ) {
-        Text(
-            text = "Achievements",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
         achievements.forEach { achievement ->
             Row(
                 modifier = Modifier
